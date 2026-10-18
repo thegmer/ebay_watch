@@ -1,0 +1,18 @@
+remove_from_watchlist:
+  fields:
+    item_id:
+      required: true
+      example: "256012345678"
+      selector:
+        text:
+          multiple: true
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ebay_watch
+refresh:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ebay_watch

@@ -1,0 +1,60 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect eBay",
+        "description": "Use your production keyset's App ID (Client ID) and Cert ID (Client Secret), plus an OAuth refresh token from the developer portal's User Tokens page.",
+        "data": {
+          "client_id": "App ID (Client ID)",
+          "client_secret": "Cert ID (Client Secret)",
+          "refresh_token": "OAuth refresh token",
+          "sandbox": "Use sandbox environment"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate eBay",
+        "description": "The eBay refresh token was rejected or expired (they last about 18 months). Generate a new one on the developer portal's User Tokens page.",
+        "data": { "refresh_token": "OAuth refresh token" }
+      }
+    },
+    "error": {
+      "invalid_auth": "eBay rejected the credentials or refresh token.",
+      "cannot_connect": "Could not reach the eBay API.",
+      "unknown": "Unexpected error. Check the logs."
+    },
+    "abort": {
+      "already_configured": "This eBay account is already configured.",
+      "reauth_successful": "Reauthenticated successfully.",
+      "unique_id_mismatch": "That token belongs to a different eBay account."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "eBay Watch options",
+        "data": {
+          "scan_interval": "Poll interval (minutes)",
+          "ending_soon_minutes": "Ending-soon alert threshold (minutes)",
+          "order_lookback_days": "Order history to track (days, max 90)"
+        }
+      }
+    }
+  },
+  "services": {
+    "remove_from_watchlist": {
+      "name": "Remove from watchlist",
+      "description": "Stop watching one or more eBay listings.",
+      "fields": {
+        "item_id": { "name": "Item ID", "description": "eBay item ID(s) to remove." },
+        "config_entry_id": { "name": "Account", "description": "Only needed with multiple eBay accounts." }
+      }
+    },
+    "refresh": {
+      "name": "Refresh",
+      "description": "Poll eBay now.",
+      "fields": {
+        "config_entry_id": { "name": "Account", "description": "Only needed with multiple eBay accounts." }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "domain": "ebay_watch",
+  "name": "eBay Watch",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": ["frontend", "http"],
+  "documentation": "https://github.com/your-user/ebay_watch",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "version": "0.1.0"
+}
