@@ -1,0 +1,67 @@
+# Replace notify.mobile_app_phone with your device's notify action.
+
+- alias: eBay - watched item ending soon
+  triggers:
+    - trigger: event
+      event_type: ebay_watch_ending_soon
+  actions:
+    - action: notify.mobile_app_phone
+      data:
+        title: "Ending in {{ trigger.event.data.minutes_left }} min"
+        message: >-
+          {{ trigger.event.data.title }} — {{ trigger.event.data.price }} {{ trigger.event.data.currency }}
+          ({{ trigger.event.data.bids }} bids)
+        data:
+          url: "{{ trigger.event.data.url }}"
+          clickAction: "{{ trigger.event.data.url }}"
+          image: "{{ trigger.event.data.image }}"
+          actions:
+            - action: "EBAY_UNWATCH_{{ trigger.event.data.item_id }}"
+              title: Stop watching
+
+- alias: eBay - unwatch from notification
+  triggers:
+    - trigger: event
+      event_type: mobile_app_notification_action
+  conditions:
+    - "{{ trigger.event.data.action is match('EBAY_UNWATCH_') }}"
+  actions:
+    - action: ebay_watch.remove_from_watchlist
+      data:
+        item_id: "{{ trigger.event.data.action | replace('EBAY_UNWATCH_', '') }}"
+
+- alias: eBay - price drop
+  triggers:
+    - trigger: event
+      event_type: ebay_watch_price_drop
+  actions:
+    - action: notify.mobile_app_phone
+      data:
+        title: "Price drop: -{{ trigger.event.data.drop }}"
+        message: "{{ trigger.event.data.title }} now {{ trigger.event.data.price }} (was {{ trigger.event.data.old_price }})"
+        data:
+          url: "{{ trigger.event.data.url }}"
+          clickAction: "{{ trigger.event.data.url }}"
+
+- alias: eBay - tracking number posted
+  triggers:
+    - trigger: event
+      event_type: ebay_watch_tracking_added
+  actions:
+    - action: notify.mobile_app_phone
+      data:
+        title: "Shipped: {{ trigger.event.data.carrier }}"
+        message: "{{ trigger.event.data.title }} — {{ trigger.event.data.number }}"
+        data:
+          url: "{{ trigger.event.data.url }}"
+          clickAction: "{{ trigger.event.data.url }}"
+
+- alias: eBay - delivered
+  triggers:
+    - trigger: event
+      event_type: ebay_watch_delivered
+  actions:
+    - action: notify.mobile_app_phone
+      data:
+        title: eBay package delivered
+        message: "{{ trigger.event.data.title }}"

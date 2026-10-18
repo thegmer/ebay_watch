@@ -1,0 +1,23 @@
+# Dashboard view (Edit dashboard > Raw configuration editor, add under views:)
+title: eBay
+path: ebay
+icon: mdi:shopping
+type: sections
+sections:
+  - type: grid
+    cards:
+      - type: tile
+        entity: sensor.ebay_watchlist
+      - type: tile
+        entity: sensor.ebay_packages_in_transit
+      - type: tile
+        entity: sensor.ebay_next_ending
+        name: Next ending
+      - type: custom:ebay-watch-card
+        grid_options: { columns: full }
+        # all optional:
+        # title: eBay
+        # watchlist_entity: sensor.ebay_watchlist
+        # orders_entity: sensor.ebay_packages_in_transit
+        # confirm_remove: true
+max_columns: 2
