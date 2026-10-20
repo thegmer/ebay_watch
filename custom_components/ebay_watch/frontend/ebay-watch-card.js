@@ -197,7 +197,8 @@ class EbayWatchCard extends HTMLElement {
   }
 }
 
-if (!customElements.get("ebay-watch-card")) {
-  customElements.define("ebay-watch-card", EbayWatchCard);
-  (window.customCards ||= []).push({ type: "ebay-watch-card", name: "eBay Watch", description: "eBay watchlist, unwatch, and purchase tracking" });
+if (!customElements.get("ebay-watch-card")) customElements.define("ebay-watch-card", EbayWatchCard);
+window.customCards ||= [];
+if (!window.customCards.some((c) => c.type === "ebay-watch-card")) {
+  window.customCards.push({ type: "ebay-watch-card", name: "eBay Watch", description: "eBay watchlist, unwatch, and purchase tracking" });
 }
