@@ -4,7 +4,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import voluptuous as vol
-from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.const import Platform
@@ -15,7 +14,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
 from .api import EbayAuthError, EbayClient
-from .const import CARD_URL, CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_REFRESH_TOKEN, CONF_SANDBOX, DOMAIN, VERSION
+from .const import CARD_URL, CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_REFRESH_TOKEN, CONF_SANDBOX, DOMAIN
 from .coordinator import FETCH_ERRORS, EbayCoordinator
 
 PLATFORMS = [Platform.SENSOR]
@@ -38,7 +37,6 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     await hass.http.async_register_static_paths(
         [StaticPathConfig(CARD_URL, str(Path(__file__).parent / "frontend" / "ebay-watch-card.js"), False)]
     )
-    add_extra_js_url(hass, f"{CARD_URL}?v={VERSION}")
 
     async def remove(call: ServiceCall) -> None:
         coord = _coordinators(hass, call)[0]
