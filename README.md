@@ -5,7 +5,7 @@ Custom integration that polls your eBay account and gives you:
 - **Watchlist**: price, shipping, bids, live countdown, and an unwatch button on each listing
 - **Alerts** as HA events: ending soon, price drop, tracking number posted, delivered
 - **Purchases**: the last 1–90 days of orders, with carrier tracking numbers and links
-- A bundled dashboard card (`custom:ebay-watch-card`) that loads automatically, so you don't register a resource
+- A bundled dashboard card (`custom:ebay-watch-card`), served by the integration
 
 It uses the eBay **Trading API** (`GetMyeBayBuying`, `RemoveFromWatchList`, `GetOrders` with `OrderRole=Buyer`), authenticated with an OAuth user token. The modern REST APIs don't expose the watchlist.
 
@@ -20,6 +20,8 @@ It uses the eBay **Trading API** (`GetMyeBayBuying`, `RemoveFromWatchList`, `Get
 ## 2. Install
 
 Copy `custom_components/ebay_watch` to `/config/custom_components/`, or add this repo to HACS as a custom repository. Restart HA, then go to *Settings → Devices & services → Add integration → eBay Watch* and paste the three values.
+
+Then register the dashboard card: **Settings → Dashboards → ⋮ → Resources → Add resource**, URL `/ebay_watch/ebay-watch-card.js?v=0.1.2`, type **JavaScript module**, and hard refresh (Ctrl+F5). Bump the `?v=` value whenever you update the integration.
 
 Options (configure on the integration): poll interval (default 10 min), ending-soon threshold (default 60 min), and order lookback (default 30 days).
 
