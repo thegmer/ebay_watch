@@ -2,7 +2,7 @@
 import logging
 
 DOMAIN = "ebay_watch"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 LOGGER = logging.getLogger(__package__)
 
 CONF_CLIENT_ID = "client_id"
