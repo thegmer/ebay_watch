@@ -88,7 +88,7 @@ class EbayWatchCard extends HTMLElement {
       <div class="head"><div class="title"></div>
         <button class="icon" data-action="refresh" title="Refresh now"><ha-icon icon="mdi:refresh"></ha-icon></button></div>
       <div class="tabs"><button data-tab="watch"></button><button data-tab="orders"></button></div>
-      <div class="tools"><input type="search" placeholder="Filter…"><div class="chips"></div></div>
+      <div class="tools"><input type="search" placeholder="Filter..."><div class="chips"></div></div>
       <div class="list"></div></ha-card>`;
     root.addEventListener("click", (e) => this._click(e));
     root.querySelector("input").addEventListener("input", (e) => {
@@ -135,9 +135,9 @@ class EbayWatchCard extends HTMLElement {
   _watchRow(i) {
     const [left, cls] = timeLeft(i.end_time);
     const auction = i.listing_type === "Chinese" || /auction/i.test(i.listing_type || "");
-    const ship = i.shipping > 0 ? ` + ${money(i.shipping, i.currency)} ship` : i.shipping === 0 ? " · free ship" : "";
-    const bids = auction ? ` · ${i.bids} bid${i.bids === 1 ? "" : "s"}` : "";
-    const variant = i.variation ? ` · ${esc(Object.values(i.variation).join(" / "))}` : "";
+    const ship = i.shipping > 0 ? ` + ${money(i.shipping, i.currency)} ship` : i.shipping === 0 ? " &middot; free ship" : "";
+    const bids = auction ? ` &middot; ${i.bids} bid${i.bids === 1 ? "" : "s"}` : "";
+    const variant = i.variation ? ` &middot; ${esc(Object.values(i.variation).join(" / "))}` : "";
     return `<div class="row">
       ${i.image ? `<img src="${esc(i.image)}" loading="lazy" referrerpolicy="no-referrer">` : `<div class="img"></div>`}
       <div class="main"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a>
@@ -158,7 +158,7 @@ class EbayWatchCard extends HTMLElement {
       <button class="icon sm" data-action="copy" data-num="${esc(t.number)}" title="Copy tracking number"><ha-icon icon="mdi:content-copy"></ha-icon></button></div>`).join("");
     return `<div class="row">
       <div class="main"><a href="https://www.ebay.com/itm/${esc(first.item_id)}" target="_blank" rel="noopener">${esc(first.title)}</a>${more}
-        <div class="meta">${esc(o.seller || "")} · ${when}</div>${trk}</div>
+        <div class="meta">${esc(o.seller || "")} &middot; ${when}</div>${trk}</div>
       <div class="side"><span class="chip ${st}">${STATES[st]}</span><span class="meta"><b>${money(o.total, o.currency)}</b></span></div></div>`;
   }
 
