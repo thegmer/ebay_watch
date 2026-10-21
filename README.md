@@ -21,7 +21,9 @@ It uses the eBay **Trading API** (`GetMyeBayBuying`, `RemoveFromWatchList`, `Get
 
 Copy `custom_components/ebay_watch` to `/config/custom_components/`, or add this repo to HACS as a custom repository. Restart HA, then go to *Settings → Devices & services → Add integration → eBay Watch* and paste the three values.
 
-Then register the dashboard card: **Settings → Dashboards → ⋮ → Resources → Add resource**, URL `/ebay_watch/ebay-watch-card.js?v=0.1.2`, type **JavaScript module**, and hard refresh (Ctrl+F5). Bump the `?v=` value whenever you update the integration.
+The dashboard card's resource is registered (and re-versioned on each update) automatically at startup; just hard refresh your browser (Ctrl+F5) after installing or updating. If your dashboards are in YAML mode, add `/ebay_watch/ebay-watch-card.js` as a JavaScript module resource yourself.
+
+**Releasing an update:** bump `version` in `manifest.json` only, then tag a matching GitHub release.
 
 Options (configure on the integration): poll interval (default 10 min), ending-soon threshold (default 60 min), and order lookback (default 30 days).
 
