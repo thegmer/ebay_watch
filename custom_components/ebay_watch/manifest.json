@@ -3,10 +3,10 @@
   "name": "eBay Watch",
   "codeowners": [],
   "config_flow": true,
-  "dependencies": ["frontend", "http"],
-  "documentation": "https://github.com/your-user/ebay_watch",
+  "dependencies": ["frontend", "http", "lovelace"],
+  "documentation": "https://github.com/thegmer/ebay_watch",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "requirements": [],
-  "version": "0.1.2"
+  "version": "0.1.3"
 }

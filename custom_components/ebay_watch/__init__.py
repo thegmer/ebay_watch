@@ -11,10 +11,11 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.typing import ConfigType
 
 from .api import EbayAuthError, EbayClient
-from .const import CARD_URL, CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_REFRESH_TOKEN, CONF_SANDBOX, DOMAIN
+from .const import CARD_URL, CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_REFRESH_TOKEN, CONF_SANDBOX, DOMAIN, LOGGER, VERSION
 from .coordinator import FETCH_ERRORS, EbayCoordinator
 
 PLATFORMS = [Platform.SENSOR]
@@ -33,10 +34,44 @@ def _coordinators(hass: HomeAssistant, call: ServiceCall) -> list[EbayCoordinato
     return [e.runtime_data for e in entries]
 
 
+async def _async_register_card(hass: HomeAssistant) -> None:
+    """Keep exactly one Lovelace resource for the card, versioned to the installed release."""
+    url = f"{CARD_URL}?v={VERSION}"
+    data = hass.data.get("lovelace")
+    resources = getattr(data, "resources", None)
+    if resources is None and isinstance(data, dict):
+        resources = data.get("resources")
+    if resources is None or not hasattr(resources, "async_create_item"):
+        LOGGER.warning("Dashboards are in YAML mode; add %s as a JavaScript module resource manually", url)
+        return
+    if not getattr(resources, "loaded", True):
+        await resources.async_load()
+        resources.loaded = True
+    existing = [r for r in resources.async_items() if r.get("url", "").split("?")[0] == CARD_URL]
+    if not existing:
+        await resources.async_create_item({"res_type": "module", "url": url})
+        LOGGER.info("Registered dashboard resource %s", url)
+        return
+    first, *dupes = existing
+    if first["url"] != url or first.get("type") != "module":
+        await resources.async_update_item(first["id"], {"res_type": "module", "url": url})
+        LOGGER.info("Updated dashboard resource to %s", url)
+    for dupe in dupes:
+        await resources.async_delete_item(dupe["id"])
+
+
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     await hass.http.async_register_static_paths(
         [StaticPathConfig(CARD_URL, str(Path(__file__).parent / "frontend" / "ebay-watch-card.js"), False)]
     )
+
+    async def _register(_hass: HomeAssistant) -> None:
+        try:
+            await _async_register_card(hass)
+        except Exception:  # noqa: BLE001 - never block setup over the card
+            LOGGER.exception("Could not register the eBay Watch dashboard resource")
+
+    async_at_started(hass, _register)
 
     async def remove(call: ServiceCall) -> None:
         coord = _coordinators(hass, call)[0]

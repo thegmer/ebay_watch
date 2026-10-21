@@ -1,8 +1,10 @@
 """Constants for eBay Watch."""
+import json
 import logging
+from pathlib import Path
 
 DOMAIN = "ebay_watch"
-VERSION = "0.1.2"
+VERSION: str = json.loads((Path(__file__).parent / "manifest.json").read_text())["version"]
 LOGGER = logging.getLogger(__package__)
 
 CONF_CLIENT_ID = "client_id"
